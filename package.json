@@ -1,9 +1,18 @@
 {
-  "name": "ai-translation",
-  "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "name": "payload-ai-translation",
+  "version": "0.1.2",
+  "description": "Payload plugin that translates localized content with Gemini",
+  "keywords": [
+    "ai",
+    "gemini",
+    "localization",
+    "payload",
+    "payload-plugin",
+    "translation"
+  ],
   "license": "MIT",
   "type": "module",
+  "homepage": "https://github.com/Zorig/payload-ai-translation",
   "exports": {
     ".": {
       "import": "./src/index.ts",

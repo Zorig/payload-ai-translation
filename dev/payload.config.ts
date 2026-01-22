@@ -1,4 +1,4 @@
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { MongoMemoryReplSet } from 'mongodb-memory-server'
 import path from 'path'
@@ -38,7 +38,18 @@ const buildConfigWithMemoryDB = async () => {
     collections: [
       {
         slug: 'posts',
-        fields: [],
+        fields: [
+          {
+            type: "text",
+            name: "title",
+            localized: true,
+          },
+          {
+            type: 'richText',
+            name: "body",
+            localized: true,
+          }
+        ],
       },
       {
         slug: 'media',
@@ -48,20 +59,25 @@ const buildConfigWithMemoryDB = async () => {
         },
       },
     ],
-    db: mongooseAdapter({
-      ensureIndexes: true,
-      url: process.env.DATABASE_URL || '',
+    db: postgresAdapter({
+      pool: {
+        connectionString: "postgres://postgres:password@127.0.0.1:5432/aitranslation"
+      },
+      push: process.env.NODE_ENV === 'development',
     }),
     editor: lexicalEditor(),
     email: testEmailAdapter,
     onInit: async (payload) => {
       await seed(payload)
     },
+    localization: {
+      locales: ['en', 'cz', 'pl'],
+      defaultLocale: 'en'
+    },
     plugins: [
       aiTranslation({
-        collections: {
-          posts: true,
-        },
+        apiKey: process.env.GEMINI_API_KEY,
+        collections: ['posts'],
       }),
     ],
     secret: process.env.PAYLOAD_SECRET || 'test-secret_key',

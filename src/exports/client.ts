@@ -1,1 +1,1 @@
-export { BeforeDashboardClient } from '../components/BeforeDashboardClient.js'
+export { TranslateButton } from '../components/admin/TranslateButton.js'
